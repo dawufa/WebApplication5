@@ -1,0 +1,163 @@
+﻿@{
+    ViewData["Title"] = "3D 繞圈輪播";
+}
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D 繞圈輪播</title>
+    <link rel="stylesheet" href="@Url.Content("~/Content/site.css")" />
+   <style>
+       /* 左上角 */
+       .title-img-left {
+           position: fixed;
+           top: 180px;
+           left: 20px;
+           max-width: 250px;
+           height: auto;
+           z-index: 999;
+           pointer-events: none; /* 不影響滑鼠拖曳 */
+       }
+
+       /* 右上角 */
+       .title-img-right {
+           position: fixed;
+           top: 100px;
+           right: 20px;
+           max-width: 400px;
+           height: auto;
+           z-index: 999;
+           pointer-events: none;
+       }
+
+       /* 下方中央 */
+       .bottom-area {
+           position: fixed;
+           bottom: 20px;
+           width: 100%;
+           text-align: center;
+           z-index: 999;
+       }
+
+       .title-img-bottom {
+           max-width: 550px;
+           height: auto;
+       }
+
+       .bottom-buttons {
+           margin-top: 10px; /* 按鈕與 title03 間距 */
+           display: flex;
+           justify-content: center;
+           gap: 30px; /* 左右按鈕間距 */
+       }
+
+           .bottom-buttons button {
+               background: transparent;
+               border: none;
+               cursor: pointer;
+               padding: 0;
+           }
+
+               .bottom-buttons button img {
+                   width: 50px;
+                   height: 50px;
+                   opacity: 0.8;
+                   transition: opacity 0.3s;
+               }
+
+                   .bottom-buttons button img:hover {
+                       opacity: 1;
+                   }
+
+
+   </style>
+</head>
+<body>
+    <!-- 左上角 -->
+    <img src="@Url.Content("~/IMAGES/Buttons/Title01.png")" class="title-img-left" />
+
+    <!-- 右上角 -->
+    <img src="@Url.Content("~/IMAGES/Buttons/Title02.png")" class="title-img-right" />
+
+    <!-- 下方中央 -->
+    <div class="bottom-area">
+        <img src="@Url.Content("~/IMAGES/Buttons/Title03.png")" class="title-img-bottom" />
+        <div class="bottom-buttons">
+            <button id="lastone">
+                <img src="@Url.Content("~/IMAGES/Buttons/LGS_B.png")" />
+            </button>
+            <button id="nextone">
+                <img src="@Url.Content("~/IMAGES/Buttons/RGS_B.png")" />
+            </button>
+        </div>
+    </div>
+        <div class="carousel-wrapper">
+           <div class="carousel" id="carousel">
+                <img src="@Url.Content("~/IMAGES/Pineapple/PA_F01.png")" alt="圖片1" />
+                <img src="@Url.Content("~/IMAGES/Pineapple/PA_F02.png")" alt="圖片2" />
+                <img src="@Url.Content("~/IMAGES/Pineapple/PA_F03.png")" alt="圖片3" />
+                <img src="@Url.Content("~/IMAGES/Pineapple/PA_F04.png")" alt="圖片4" />
+                <img src="@Url.Content("~/IMAGES/Pineapple/PA_F05.png")" alt="圖片5" />
+            </div>
+        </div>
+
+        <script>
+            const carousel = document.getElementById('carousel');
+            const imgs = carousel.querySelectorAll('img');
+            let angle = 0;
+
+            const step = 360 / imgs.length; // 每張圖片間隔角度
+            // 間隔放大
+            const zRadius = 300;
+            const xRadius = 200;
+
+            function rotate(deg) {
+                angle += deg;
+                updateCarousel();
+            }
+
+            function updateCarousel() {
+                imgs.forEach((img, i) => {
+                    const currentAngle = step * i + angle;
+                    const rad = (currentAngle * Math.PI) / 180;
+
+                    const z = Math.cos(rad) * zRadius;;  // 深度
+                    const x = Math.sin(rad) * xRadius;  // 左右偏移
+
+                    const scale = 1 + (z / 800);    // 依深度縮放
+                    const opacity = 0.3 + (z + zRadius) / (zRadius * 2); // 前面更亮
+
+                    img.style.transform = `translate(-50%, -50%) translateX(${x}px) translateZ(${z}px) scale(${scale})`;
+                    img.style.opacity = opacity;
+                    img.style.zIndex = Math.round(z);
+                });
+            }
+
+            let autoRotateInterval;
+            let autoRotateDelay = 6000; // 自動旋轉間隔 ms
+
+            function startAutoRotate() {
+                stopAutoRotate();
+                autoRotateInterval = setInterval(() => {
+                    rotate(-step);
+                }, autoRotateDelay);
+            }
+            function stopAutoRotate() {
+                if (autoRotateInterval) {
+                    clearInterval(autoRotateInterval);
+                    autoRotateInterval = null;
+                }
+            }
+            document.getElementById('nextone').onclick = () => {
+                rotate(-step); startAutoRotate();
+            };
+            document.getElementById('lastone').onclick = () => {
+                rotate(step); startAutoRotate();
+            };
+            startAutoRotate();
+            updateCarousel(); // 初始化
+        </script>
+</body>
+</html>
