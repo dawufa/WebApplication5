@@ -1,14 +1,12 @@
-﻿@{
-    ViewData["Title"] = "2D 繞弧輪播";
-}
-
+﻿
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2D 繞弧輪播</title>
-    <link rel="stylesheet" href="@Url.Content("~/Content/site2.css")" />
+    @*<link rel="stylesheet" href="@Url.Content("~/Content/site2.css")" />*@
+    <link rel="stylesheet" href="https://dawufa.github.io/WebApplication5/WebApplication5/Content/site2.css "/>
     <style>
         /* 左上角 */
         .title-img-left {
@@ -74,33 +72,38 @@
 </head>
 <body>
     <!-- 左上角 -->
-    <img src="@Url.Content("~/IMAGES/Buttons/Title01.png")" class="title-img-left" />
+    <img src="https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Buttons/Title01.png" class="title-img-left" />
 
-    <!-- 右上角 -->
-    <img src="@Url.Content("~/IMAGES/Buttons/Title02.png")" class="title-img-right" />
+    <!-- 右上角圖片 -->
+    <img src="https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Buttons/Title02.png" class="title-img-right" />
 
     <!-- 下方中央 -->
     <div class="bottom-area">
-        <img src="@Url.Content("~/IMAGES/Buttons/Title03.png")" class="title-img-bottom" />
+        <img src="https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Buttons/Title03.png" class="title-img-bottom" />
         <div class="bottom-buttons">
             <button id="lastone">
-                <img src="@Url.Content("~/IMAGES/Buttons/LGS_B.png")" />
+                <img src="https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Buttons/LGS_B.png" />
             </button>
             <button id="nextone">
-                <img src="@Url.Content("~/IMAGES/Buttons/RGS_B.png")" />
+                <img src="https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Buttons/RGS_B.png" />
             </button>
         </div>
     </div>
     <div class="carousel-wrapper">
         <div class="carousel" id="carousel">
-            @for (int i = 1; i <= 5; i++)
-            {
-                <img src="@Url.Content($"~/IMAGES/Pineapple/PA_F0{i}.png")" class="carousel-img" />
-            }
-            @for (int i = 1; i <= 5; i++)
-            {
-                <img src="@Url.Content($"~/IMAGES/Pineapple/PA_F0{i}.png")" class="carousel-img" style="opacity: 0;" />
-            }
+            <img src="https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Pineapple/PA_F01.png" class="carousel-img" />
+            <img src="https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Pineapple/PA_F02.png" class="carousel-img" />
+            <img src="https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Pineapple/PA_F03.png" class="carousel-img" />
+            <img src="https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Pineapple/PA_F04.png" class="carousel-img" />
+            <img src="https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Pineapple/PA_F05.png" class="carousel-img" />
+
+            <!-- 第二組透明 -->
+            <img src="https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Pineapple/PA_F01.png" class="carousel-img" style="opacity: 0;" />
+            <img src="https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Pineapple/PA_F02.png" class="carousel-img" style="opacity: 0;" />
+            <img src="https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Pineapple/PA_F03.png" class="carousel-img" style="opacity: 0;" />
+            <img src="https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Pineapple/PA_F04.png" class="carousel-img" style="opacity: 0;" />
+            <img src="https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Pineapple/PA_F05.png" class="carousel-img" style="opacity: 0;" />
+
         </div>
     </div>
     <script>
@@ -110,56 +113,15 @@
         const visibleCount = 5;
         let currentStartIndex = 0;
         let isAnimating = false;
+        let isFirstRender = true; // 是否為第一次渲染
 
-        //function updateCarousel() {
-
-        //    const radius = 500;
-        //    const angleStep = Math.PI / 6;
-        //    const scaleStep = 0.08;
-
-        //    imgs.forEach((img, i) => {
-        //        const relativeIndex = (i - currentStartIndex + totalImgs) % totalImgs;
-
-        //        if (relativeIndex < visibleCount) {
-        //            const baseIndex = relativeIndex - 2; // -2 ~ +2
-        //            const angle = baseIndex * angleStep;
-        //            const x = Math.sin(angle) * radius;
-        //            const z = Math.cos(angle) * radius;
-        //            const scale = 1 - Math.abs(baseIndex) * scaleStep;
-
-        //            // 判斷 rotateY 使用哪個角度
-        //            let rotateY;
-        //            if (relativeIndex === 0) {
-        //                // 最左邊跟左邊第二張同角度
-        //                rotateY = -(-1 * angleStep) * (180 / Math.PI);  // same as relativeIndex==1
-        //            } else if (relativeIndex === visibleCount - 1) {
-        //                // 最右邊跟右邊第二張同角度
-        //                rotateY = -(1 * angleStep) * (180 / Math.PI);  // same as relativeIndex==3
-        //            } else {
-        //                rotateY = -angle * (180 / Math.PI);
-        //            }
-
-        //            img.style.opacity = 1;
-        //            img.style.zIndex = 100 - Math.abs(baseIndex);
-        //            img.style.transform = `
-        //        translateX(${x}px)
-        //        translateZ(${-z}px)
-        //        scale(${scale})
-        //        rotateY(${rotateY}deg)
-        //    `;
-        //        } else {
-        //            img.style.opacity = 0;
-        //            img.style.zIndex = 0;
-        //            img.style.transform = 'translateZ(-2000px) scale(0.5)';
-        //        }
-        //    });
-        //}
         function updateCarousel() {
             const radius = 500;
             const angleStep = Math.PI / 6;
             const scaleStep = 0.08;
-            const yAmplitude = 100; // ⭐️ 調整這個值控制「垂直 U 曲線」程度
-            const skewAngle = 10;  // 傾斜角度，正負用來控制方向
+            const yAmplitude = 100;
+            const skewAngle = 10;
+            const transitionTime = 600; // 與 CSS transform 過渡時間一致
 
             imgs.forEach((img, i) => {
                 const relativeIndex = (i - currentStartIndex + totalImgs) % totalImgs;
@@ -181,41 +143,79 @@
                         rotateY = -angle * (180 / Math.PI);
                     }
 
-                    // 根據 baseIndex 判斷 skewY 方向
                     let skewYAngle = 0;
                     if (baseIndex < 0) {
-                        skewYAngle = -skewAngle;  // 左邊斜向正常方向
+                        skewYAngle = -skewAngle;
                     } else if (baseIndex > 0) {
-                        skewYAngle = skewAngle;   // 右邊斜向倒過來方向
-                    } else {
-                        skewYAngle = 0;           // 中間不斜
+                        skewYAngle = skewAngle;
                     }
 
-                    img.style.opacity = 1;
-                    img.style.zIndex = 100 - Math.abs(baseIndex);
-                    img.style.transform = `
+                    const baseTransform = `
                 translateX(${x}px)
-                 translateY(${y}px)
+                translateY(${y}px)
                 translateZ(${-z}px)
                 scale(${scale})
                 rotateY(${rotateY}deg)
                 skewY(${skewYAngle}deg)
             `;
+                    img.dataset.baseTransform = baseTransform;
+                    img.style.transition = `transform ${transitionTime}ms ease-in-out`;
+                    img.style.opacity = 1;
+                    img.style.zIndex = 100 - Math.abs(baseIndex);
+                    img.style.transform = baseTransform;
+
+                   
                 } else {
                     img.style.opacity = 0;
                     img.style.zIndex = 0;
                     img.style.transform = 'translateZ(-2000px) scale(0.5)';
                 }
             });
+            if (isFirstRender == false) {
+                setTimeout(() => {
+                    const centerImg = imgs[(currentStartIndex + 2) % totalImgs];
+                    bounceImage(centerImg);
+                }, transitionTime); } // 第一次渲染之後改為 false
+            // 延遲觸發中間圖片的彈跳動畫
+            
+
         }
 
+        function bounceImage(img) {
+            let start = null;
+            const duration = 150;
+            const peakY = -400;
+            const peakZ = 50        ;
+            const peakScale = 25; // 放大 1.2 倍
 
+            function animateBounce(timestamp) {
+                if (!start) start = timestamp;
+                const progress = (timestamp - start) / duration;
+                let t = progress > 1 ? 1 : progress;
+                const bounce = Math.sin(t * Math.PI);
+
+                const translateY = bounce * peakY;
+                const translateZ = bounce * peakZ;
+
+                const scale = 1 + (peakScale - 1) * bounce; // 從 1 放大到 1.2 再回來
+                // 將彈跳疊加到原本 transform
+              
+                img.style.transform = `${img.dataset.baseTransform} scale(${scale}) translateY(${translateY}px) translateZ(${translateZ}px)`;
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateBounce);
+                }
+            }
+
+            requestAnimationFrame(animateBounce);
+        }
 
         function handleNext() {
             if (isAnimating) return;
             isAnimating = true;
 
             currentStartIndex = (currentStartIndex + 1) % totalImgs;
+            isFirstRender = false;
             updateCarousel();
 
             setTimeout(() => isAnimating = false, 600);
@@ -226,6 +226,7 @@
             isAnimating = true;
 
             currentStartIndex = (currentStartIndex - 1 + totalImgs) % totalImgs;
+            isFirstRender = false;
             updateCarousel();
 
             setTimeout(() => isAnimating = false, 600);

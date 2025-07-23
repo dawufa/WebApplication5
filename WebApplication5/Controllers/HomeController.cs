@@ -16,6 +16,13 @@ namespace WebApplication5.Controllers
         {
             return View();
         }
-     
+        public ActionResult Curtain()
+        {
+            return View();
+        }
+        public ActionResult SingleCurtain()
+        {
+            return View();
+        }
     }
 }
