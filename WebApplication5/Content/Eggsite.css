@@ -1,0 +1,44 @@
+﻿/* 響應式設計 */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .horizontal-section ul {
+        height: 200px;
+    }
+
+    .horizontal-section li:hover {
+        width: 250px;
+    }
+
+    .vertical-section ul {
+        height: 300px;
+    }
+
+    .vertical-section li:hover {
+        height: 200px;
+    }
+}
+
+/* 動畫效果 */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.section {
+    animation: slideIn 0.8s ease-out;
+}
+
+    .section:nth-child(2) {
+        animation-delay: 0.2s;
+    }

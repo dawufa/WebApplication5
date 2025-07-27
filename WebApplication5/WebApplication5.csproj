@@ -143,6 +143,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\Eggsite.css" />
     <Content Include="Content\site2.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -158,6 +159,19 @@
     <Content Include="IMAGES\Buttons\LGS_B.png" />
     <Content Include="IMAGES\Buttons\LWL_B.png" />
     <Content Include="IMAGES\Buttons\LWS_B.png" />
+    <Content Include="IMAGES\Eggyolkcake\vertical01.jpg" />
+    <Content Include="IMAGES\Eggyolkcake\horizontal01.jpg" />
+    <Content Include="IMAGES\Eggyolkcake\vertical02.jpg" />
+    <Content Include="IMAGES\Eggyolkcake\vertical03.jpg" />
+    <Content Include="IMAGES\Eggyolkcake\vertical04.jpg" />
+    <Content Include="IMAGES\Eggyolkcake\vertical05.jpg" />
+    <Content Include="IMAGES\Eggyolkcake\vertical06.jpg" />
+    <Content Include="IMAGES\Eggyolkcake\horizontal02.jpg" />
+    <Content Include="IMAGES\Eggyolkcake\horizontal03.jpg" />
+    <Content Include="IMAGES\Eggyolkcake\horizontal04.jpg" />
+    <Content Include="IMAGES\Eggyolkcake\horizontal05.jpg" />
+    <Content Include="IMAGES\Pineapple\BG_01.jpg" />
+    <Content Include="IMAGES\Pineapple\BG_02.png" />
     <Content Include="IMAGES\Pineapple\PA_F01.png" />
     <Content Include="IMAGES\Pineapple\PA_F02.png" />
     <Content Include="IMAGES\Pineapple\PA_F03.png" />
@@ -195,6 +209,8 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\translateX.cshtml" />
+    <Content Include="Views\Home\Curtain.cshtml" />
+    <Content Include="Views\Home\SingleCurtain.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
