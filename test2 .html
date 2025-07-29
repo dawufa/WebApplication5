@@ -192,7 +192,14 @@
             html, body,
             .container,
             .image-container {
-                height: 40vh;
+                max-width: 500px; /* 強制維持版面完整顯示 */
+ width: 100%;
+ height: auto; /* 改為自動高度，不要固定高度 */
+ min-height: auto; /* 移除最小高度限制 */
+ margin: 0;
+ padding: 0;
+ align-items: center;
+ position: relative;
             }
         }
     </style>
