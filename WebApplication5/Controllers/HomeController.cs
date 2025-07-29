@@ -24,7 +24,11 @@ namespace WebApplication5.Controllers
         {
             return View();
         }
-        public ActionResult test()
+        public ActionResult translateXshopline()
+        {
+            return View();
+        }
+        public ActionResult test2()
         {
             return View();
         }

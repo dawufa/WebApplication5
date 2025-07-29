@@ -1,13 +1,7 @@
 ﻿
-@{
-    Layout = null;
-}
-
-<!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Curtain</title>
+   
     <style>
         body {
             margin: 0;
@@ -135,7 +129,7 @@
                 top: 0;
                 box-shadow: none;
             }
-      
+
             .flip-face.back {
                 transform: rotateY(180deg);
             }
@@ -281,7 +275,7 @@
             }
             horizontalFlipStrips.classList.remove('active');
         }
-        
+
         // 頁面載入時初始化
         document.addEventListener('DOMContentLoaded', function () {
             initializeStrips();
@@ -319,7 +313,7 @@
 
                 // 執行翻轉動畫
                 strips.forEach((strip, idx) => {
-                   setTimeout(() => {
+                    setTimeout(() => {
                         strip.classList.add('flipping');
 
                         // 強制設置transform屬性
@@ -367,7 +361,7 @@
 
                             // 如果圖片已經載入，強制重新渲染
                             if (backImg.complete) {
-                               // 強制重新渲染
+                                // 強制重新渲染
                                 backImg.style.display = 'none';
                                 backImg.offsetHeight; // 觸發重排
                                 backImg.style.display = 'block';
@@ -409,10 +403,10 @@
                         }
                     });
                 }, stripCount * 300 + 1500);
-            } 
-               
             }
-        
+
+        }
+
     </script>
 </body>
 </html>
