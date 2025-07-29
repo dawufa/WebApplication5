@@ -211,6 +211,7 @@
     <Content Include="Views\Home\translateX.cshtml" />
     <Content Include="Views\Home\Curtain.cshtml" />
     <Content Include="Views\Home\SingleCurtain.cshtml" />
+    <Content Include="Views\Home\test.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

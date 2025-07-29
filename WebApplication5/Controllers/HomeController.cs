@@ -24,5 +24,9 @@ namespace WebApplication5.Controllers
         {
             return View();
         }
+        public ActionResult test()
+        {
+            return View();
+        }
     }
 }
