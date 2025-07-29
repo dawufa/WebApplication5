@@ -191,6 +191,14 @@
             transition: none !important;
             transform: rotateX(180deg); /* 還是會翻，但瞬間完成 */
         }
+            /* ✅ 響應式設定：手機寬度小於 500px 時縮小高度 */
+        @media (max-width: 500px) {
+            html, body,
+            .container,
+            .image-container {
+                height: 40vh;
+            }
+        }
     </style>
 </head>
 <body>
