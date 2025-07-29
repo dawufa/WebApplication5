@@ -203,8 +203,15 @@
 
     </div>
     <script>
-        window.addEventListener('load', () => {
-    initializeStrips(); // 等整個 iframe 內部頁面載入後才初始化動畫
+    window.addEventListener('load', () => {
+  // 延遲執行 → 等 DOM / CSS layout 都處理完
+  setTimeout(() => {
+    initializeStrips();
+    setTimeout(() => {
+      nextImage('horizontal');
+      startAutoPlay();
+    }, 500); // 動畫延後開始，避免黑畫面 + 卡頓
+  }, 300); // 初始化也延後
 });
 
         // 水平圖片
