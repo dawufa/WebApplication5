@@ -3,34 +3,33 @@
 <head>
     
     <style>
-        body {
+         html, body {
             margin: 0;
-            padding: 20px;
+            padding: 0;
             background: #000;
             font-family: 'Arial', sans-serif;
-            min-height: 100vh;
+           width: 100vw;
+            height: 100vh;
             overflow: hidden;
+             box-sizing: border-box;
         }
-
+        * {
+            box-sizing: inherit;
+        }
         .container {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 50px;
-            max-width: 1600px;
-            margin: 0 auto;
+            width: 100vw;
             height: 100vh;
-            padding: 20px;
+            margin: 0;
         }
 
         .section {
-            flex: 0 1 auto;
-            position: relative;
-            overflow: visible;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+             position: relative;
+            width: 100%;
+            height: 100%;
         }
 
         .section-title {
@@ -53,14 +52,11 @@
         }
 
         .image-container {
-            position: relative;
-            width: auto;
-            height: 400px;
-            aspect-ratio: 16/10; /* 根據原圖比例調整 */
-            margin: 0 auto;
+             position: relative;
+            width: 100vw;
+            height: 100vh;
             background: #000;
             overflow: hidden;
-            border-radius: 10px;
         }
 
         .full-image {
