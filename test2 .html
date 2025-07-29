@@ -404,7 +404,14 @@
                     });
                 }, stripCount * 300 + 1500);
             } 
-               
+               backImg.onload = () => {
+    console.log(`圖片載入成功：${backImg.src}`);
+    back.appendChild(backImg);
+};
+backImg.onerror = () => {
+    console.error(`圖片載入失敗：${backImg.src}`);
+};
+
             }
         
     </script>
