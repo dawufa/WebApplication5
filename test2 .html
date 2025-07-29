@@ -209,6 +209,10 @@
 
     </div>
     <script>
+        window.addEventListener('load', () => {
+    initializeStrips(); // 等整個 iframe 內部頁面載入後才初始化動畫
+});
+
         // 水平圖片
         const horizontalImages = [
             'https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Eggyolkcake/horizontal01.jpg',
@@ -404,13 +408,7 @@
                     });
                 }, stripCount * 300 + 1500);
             } 
-               backImg.onload = () => {
-    console.log(`圖片載入成功：${backImg.src}`);
-    back.appendChild(backImg);
-};
-backImg.onerror = () => {
-    console.error(`圖片載入失敗：${backImg.src}`);
-};
+          
 
             }
         
