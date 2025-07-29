@@ -1,32 +1,33 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+   
     <style>
-         html, body {
+        html, body {
+            width: 100%;
+            height: 100%;
             margin: 0;
             padding: 0;
-            background: #000;
-            font-family: 'Arial', sans-serif;
-           width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            }
+        }
+
         .container {
+            width: 100vw;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 50px;
-            width: 100vw;
-            height: 100vh;
-            margin: 0;
+            background: #000;
         }
 
         .section {
-             position: relative;
             width: 100%;
             height: 100%;
+            position: relative;
+            overflow: visible;
+            border-radius: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
         .section-title {
@@ -49,11 +50,13 @@
         }
 
         .image-container {
-             position: relative;
+            position: relative;
             width: 100%;
             height: 100%;
+                      
             background: #000;
             overflow: hidden;
+            border-radius: 0;
         }
 
         .full-image {
@@ -122,7 +125,7 @@
                 top: 0;
                 box-shadow: none;
             }
-      
+
             .flip-face.back {
                 transform: rotateY(180deg);
             }
@@ -187,7 +190,6 @@
             transition: none !important;
             transform: rotateX(180deg); /* 還是會翻，但瞬間完成 */
         }
-        
     </style>
 </head>
 <body>
@@ -203,10 +205,6 @@
 
     </div>
     <script>
-        window.addEventListener('load', () => {
-    initializeStrips(); // 等整個 iframe 內部頁面載入後才初始化動畫
-});
-
         // 水平圖片
         const horizontalImages = [
             'https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Eggyolkcake/horizontal01.jpg',
@@ -273,7 +271,7 @@
             }
             horizontalFlipStrips.classList.remove('active');
         }
-        
+
         // 頁面載入時初始化
         document.addEventListener('DOMContentLoaded', function () {
             initializeStrips();
@@ -311,7 +309,7 @@
 
                 // 執行翻轉動畫
                 strips.forEach((strip, idx) => {
-                   setTimeout(() => {
+                    setTimeout(() => {
                         strip.classList.add('flipping');
 
                         // 強制設置transform屬性
@@ -324,7 +322,7 @@
                         setTimeout(() => {
                             const back = strip.querySelector('.flip-face.back');
                             if (!back) {
-                                console.error(分割 ${idx} 找不到back元素);
+                                console.error(`分割 ${idx} 找不到back元素`);
                                 return;
                             }
 
@@ -351,15 +349,15 @@
                             backImg.style.display = 'block';
 
                             // 調試信息
-                            console.log(分割 ${idx}: splitXs[${idx}]=${splitXs[idx]}, scale=${scale}, imageLeft=${imageLeft}, nextImage=${horizontalImages[nextIdx]}, containerW=${containerW});
+                            console.log(`分割 ${idx}: splitXs[${idx}]=${splitXs[idx]}, scale=${scale}, imageLeft=${imageLeft}, nextImage=${horizontalImages[nextIdx]}, containerW=${containerW}`);
 
                             // 立即添加圖片到DOM
                             back.appendChild(backImg);
-                            console.log(分割 ${idx} 圖片已添加到DOM);
+                            console.log(`分割 ${idx} 圖片已添加到DOM`);
 
                             // 如果圖片已經載入，強制重新渲染
                             if (backImg.complete) {
-                               // 強制重新渲染
+                                // 強制重新渲染
                                 backImg.style.display = 'none';
                                 backImg.offsetHeight; // 觸發重排
                                 backImg.style.display = 'block';
@@ -371,7 +369,7 @@
 
                 setTimeout(() => {
                     horizontalIndex = nextIdx;
-                    document.getElementById('horizontalIndicator').textContent = ${horizontalIndex + 1} / ${horizontalImages.length};
+                    document.getElementById('horizontalIndicator').textContent = `${horizontalIndex + 1} / ${horizontalImages.length}`;
                     // 更新完整圖片為下一張
                     fullImage.src = horizontalImages[horizontalIndex];
                     flipStrips.classList.remove('active');
@@ -401,11 +399,10 @@
                         }
                     });
                 }, stripCount * 300 + 1500);
-            } 
-          
-
             }
-        
+
+        }
+
     </script>
 </body>
 </html>
