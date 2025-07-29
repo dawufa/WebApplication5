@@ -101,7 +101,9 @@
         .flip-strip.flipping .flip-inner {
             transform: rotateY(180deg) !important;
         }
-
+        .flip-inner, .flip-face img {
+          will-change: transform, opacity;
+        }
         .flip-face {
             width: 100%;
             height: 100%;
@@ -217,7 +219,7 @@
         // 水平圖片
         const horizontalImages = [
             'https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Eggyolkcake/horizontal01.jpg',
-            'https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Eggyolkcake/horizontal01.jpg'
+            
         ];
         let horizontalIndex = 0;
 
