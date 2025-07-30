@@ -350,7 +350,7 @@
 
         setTimeout(() => {
             horizontalIndex = nextIdx;
-            document.getElementById('horizontalIndicator').textContent = ${horizontalIndex + 1} / ${horizontalImages.length};
+            document.getElementById('horizontalIndicator').textContent = `${horizontalIndex + 1} / ${horizontalImages.length}`;
             fullImage.src = horizontalImages[horizontalIndex];
             flipStrips.classList.remove('active');
             setTimeout(() => {
