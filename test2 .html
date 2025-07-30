@@ -199,24 +199,20 @@
 
 /* 響應式：手機版（最大寬度 500px） */
 @media (max-width: 500px) {
-    html, body {
-        height: 90vh; /* 或你想設定成的高度比例，例如 80vh、calc(100vh - 50px) 等 */
-    }
-
-    .container {
-        height: 90vh;
-    }
-
-    .image-container {
-        height: 90vh;
-    }
-    .full-image {
-    object-fit: contain;  /* ✅ 改這裡才會生效 */
+  html, body,
+  .container,
+  .image-container {
+    height: 350px;
   }
-    img.full-image {
-  max-width: 500px;
-  width: 100%;
+
+.full-image {
+  display: block;
+  max-width: 100%;
   height: auto;
+  object-fit: contain;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
 }
 }
 
