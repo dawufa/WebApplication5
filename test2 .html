@@ -1,25 +1,3 @@
-<style>
-iframe {
-    width: 100%;
-    height: 100vh;
-    border: none;
-    display: block;
-}
- @media(max-width: 500px) {
-        iframe{
-            max-width: 500px; 
-           
-            max-height: 335px;
-           
-        }
-  }
-</style>
-
-<iframe src="https://dawufa.github.io/WebApplication5/test2%20.html"
-        scrolling="no"
-        loading="lazy">
-</iframe>
-我用上面的iframe呼叫我的github網頁
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -250,11 +228,12 @@ iframe {
     </div>
 <script>
     window.addEventListener('load', () => {
-        initializeStrips(); // ✅ 等整個頁面與資源都載入完成
+       
         setTimeout(() => {
-            nextImage('horizontal');
-        }, 1000);
-        startAutoPlay();
+             initializeStrips(); // ✅ 等整個頁面與資源都載入完成
+            setTimeout(() =>nextImage('horizontal'), 1000);       
+            startAutoPlay();
+         }, 100);
     });
 
     const horizontalImages = [
@@ -392,6 +371,5 @@ iframe {
         }, stripCount * 300 + 3500);
     }
 </script>
-
 </body>
 </html>
