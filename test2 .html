@@ -226,210 +226,150 @@
         </div>
 
     </div>
-    <script>
-        window.addEventListener('load', () => {
-    initializeStrips(); // 等整個 iframe 內部頁面載入後才初始化動畫
-});
+<script>
+    window.addEventListener('load', () => {
+        initializeStrips(); // ✅ 等整個頁面與資源都載入完成
+        setTimeout(() => {
+            nextImage('horizontal');
+        }, 1000);
+        startAutoPlay();
+    });
 
-        // 水平圖片
-        const horizontalImages = [
-            'https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Eggyolkcake/horizontal01.jpg',
-            'https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Eggyolkcake/horizontal01.jpg'
-        ];
-        let horizontalIndex = 0;
+    const horizontalImages = [
+        'https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Eggyolkcake/horizontal01.jpg',
+        'https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Eggyolkcake/horizontal01.jpg'
+    ];
+    let horizontalIndex = 0;
+    const splitXs = [0, 0, 153, 695, 1255, 1805, 2365, 2905, 3470, 4025, 4575, 5130, 5695, 6255];
+    const stripCount = splitXs.length;
+    const originalWidth = 6400;
 
-        // 你給的分割點（單位: px）
-        const splitXs = [0, 0, 153, 695, 1255, 1805, 2365, 2905, 3470, 4025, 4575, 5130, 5695, 6255];
-        const stripCount = splitXs.length;
-        // 假設原圖寬度
-        const originalWidth = 6400; // 請依實際圖片寬度調整
+    function initializeStrips() {
+        const horizontalFlipStrips = document.getElementById('horizontalFlipStrips');
+        horizontalFlipStrips.innerHTML = '';
+        const container = document.getElementById('horizontalContainer');
+        const containerW = container.offsetWidth || container.clientWidth;
+        const scale = containerW / originalWidth;
+        for (let i = 0; i < stripCount; i++) {
+            const strip = document.createElement('div');
+            strip.className = 'flip-strip';
+            let left = (i === 0) ? 0 : splitXs[i] * scale;
+            let width = (i === stripCount - 1)
+                ? containerW - left
+                : (splitXs[i + 1] - splitXs[i]) * scale;
+            strip.style.left = left + 'px';
+            strip.style.width = width + 'px';
+            strip.style.position = 'absolute';
+            strip.style.height = '100%';
+            strip.style.overflow = 'hidden';
 
-        // 初始化函數
-        function initializeStrips() {
-            const horizontalFlipStrips = document.getElementById('horizontalFlipStrips');
-            horizontalFlipStrips.innerHTML = '';
-            const container = document.getElementById('horizontalContainer');
-            const containerW = container.offsetWidth || container.clientWidth;
-            const scale = containerW / originalWidth;
-            for (let i = 0; i < stripCount; i++) {
-                const strip = document.createElement('div');
-                strip.className = 'flip-strip';
-                let left, width;
-                if (i === 0) {
-                    left = 0;
-                    width = splitXs[i] * scale;
-                } else if (i === stripCount - 1) {
-                    left = splitXs[i] * scale;
-                    width = containerW - left;
-                } else {
-                    left = splitXs[i] * scale;
-                    width = (splitXs[i + 1] - splitXs[i]) * scale;
-                }
-                strip.style.left = left + 'px';
-                strip.style.width = width + 'px';
-                strip.style.position = 'absolute';
-                strip.style.height = '100%';
-                strip.style.overflow = 'hidden';
+            const inner = document.createElement('div');
+            inner.className = 'flip-inner';
 
-                const inner = document.createElement('div');
-                inner.className = 'flip-inner';
+            const front = document.createElement('div');
+            front.className = 'flip-face front';
+            const frontImg = document.createElement('img');
+            frontImg.src = horizontalImages[horizontalIndex];
+            frontImg.style.position = 'absolute';
+            frontImg.style.left = -splitXs[i] * scale + 'px';
+            frontImg.style.top = '0';
+            frontImg.style.width = containerW + 'px';
+            frontImg.style.height = '100%';
+            frontImg.style.objectFit = 'cover';
+            front.appendChild(frontImg);
 
-                // 正面
-                const front = document.createElement('div');
-                front.className = 'flip-face front';
-                const frontImg = document.createElement('img');
-                frontImg.src = horizontalImages[horizontalIndex];
-                frontImg.style.position = 'absolute';
-                frontImg.style.left = -splitXs[i] * scale + 'px';
-                frontImg.style.top = '0';
-                frontImg.style.width = containerW + 'px';
-                frontImg.style.height = '100%';
-                frontImg.style.objectFit = 'cover';
-                front.appendChild(frontImg);
-
-                // 背面（初始化時只有黑色背景，無圖片）
-                const back = document.createElement('div');
-                back.className = 'flip-face back';
-                inner.appendChild(front);
-                inner.appendChild(back);
-                strip.appendChild(inner);
-                horizontalFlipStrips.appendChild(strip);
-            }
-            horizontalFlipStrips.classList.remove('active');
+            const back = document.createElement('div');
+            back.className = 'flip-face back';
+            inner.appendChild(front);
+            inner.appendChild(back);
+            strip.appendChild(inner);
+            horizontalFlipStrips.appendChild(strip);
         }
-        
-        // 頁面載入時初始化
-        document.addEventListener('DOMContentLoaded', function () {
-            initializeStrips();
+        horizontalFlipStrips.classList.remove('active');
+    }
 
-            // 立即執行第一次動畫
-            setTimeout(() => {
-                nextImage('horizontal');
-            }, 1000); // 等待1秒後執行第一次動畫
+    function startAutoPlay() {
+        setInterval(() => {
+            nextImage('horizontal');
+        }, 8000);
+    }
 
-            // 啟動自動輪播
-            startAutoPlay();
+    function nextImage(type) {
+        if (type !== 'horizontal') return;
+
+        const fullImage = document.getElementById('horizontalFullImage');
+        const flipStrips = document.getElementById('horizontalFlipStrips');
+        const nextIdx = (horizontalIndex + 1) % horizontalImages.length;
+        fullImage.classList.add('hidden');
+        flipStrips.classList.add('active');
+
+        const strips = flipStrips.querySelectorAll('.flip-strip');
+        strips.forEach((strip, i) => {
+            const back = strip.querySelector('.flip-face.back');
+            back.innerHTML = '';
         });
 
-        // 自動輪播功能
-        function startAutoPlay() {
-            setInterval(() => {
-                nextImage('horizontal');
-            }, 8000); // 每8秒執行一次
-        }
-
-        function nextImage(type) {
-            if (type === 'horizontal') {
-                const fullImage = document.getElementById('horizontalFullImage');
-                const flipStrips = document.getElementById('horizontalFlipStrips');
-                const nextIdx = (horizontalIndex + 1) % horizontalImages.length;
-                fullImage.classList.add('hidden');
-                flipStrips.classList.add('active');
-                const strips = flipStrips.querySelectorAll('.flip-strip');
-
-                // 先把背面都設成黑色（移除圖片）
-                strips.forEach((strip, i) => {
-                    const back = strip.querySelector('.flip-face.back');
-                    back.innerHTML = '';
-                });
-
-                // 執行翻轉動畫
-                strips.forEach((strip, idx) => {
-                   setTimeout(() => {
-                        strip.classList.add('flipping');
-
-                        // 強制設置transform屬性
-                        const inner = strip.querySelector('.flip-inner');
-                        if (inner) {
-                            inner.style.transform = 'rotateY(180deg)';
-                        }
-
-                        // 在翻轉一半時（600ms）換成新圖片
-                        setTimeout(() => {
-                            const back = strip.querySelector('.flip-face.back');
-                            if (!back) {
-                                console.error(`分割 ${idx} 找不到back元素`);
-                                return;
-                            }
-
-                            back.innerHTML = '';
-                            const backImg = document.createElement('img');
-                            backImg.src = horizontalImages[nextIdx];
-                            backImg.style.position = 'absolute';
-
-                            // 修正圖片定位計算 - 確保每個分割顯示正確的圖片部分
-                            const container = document.getElementById('horizontalContainer');
-                            const containerW = container.offsetWidth || container.clientWidth;
-                            const scale = containerW / originalWidth;
-
-                            // 計算這個分割應該顯示的圖片位置
-                            // 每個分割的圖片left位置應該是負的，這樣才能顯示正確的部分
-                            const imageLeft = -splitXs[idx] * scale;
-                            backImg.style.left = imageLeft + 'px';
-                            backImg.style.top = '0';
-                            backImg.style.width = containerW + 'px';
-                            backImg.style.height = '100%';
-                            backImg.style.objectFit = 'cover';
-                            backImg.style.boxShadow = 'none';
-                            backImg.style.zIndex = '1';
-                            backImg.style.display = 'block';
-
-                            // 調試信息
-                            console.log(`分割 ${idx}: splitXs[${idx}]=${splitXs[idx]}, scale=${scale}, imageLeft=${imageLeft}, nextImage=${horizontalImages[nextIdx]}, containerW=${containerW}`);
-
-                            // 立即添加圖片到DOM
-                            back.appendChild(backImg);
-                            console.log(`分割 ${idx} 圖片已添加到DOM`);
-
-                            // 如果圖片已經載入，強制重新渲染
-                            if (backImg.complete) {
-                               // 強制重新渲染
-                                backImg.style.display = 'none';
-                                backImg.offsetHeight; // 觸發重排
-                                backImg.style.display = 'block';
-                            }
-                        }, 600); // 1.2s動畫的一半
-                    }, idx * 300);
-
-                });
+        strips.forEach((strip, idx) => {
+            setTimeout(() => {
+                strip.classList.add('flipping');
+                const inner = strip.querySelector('.flip-inner');
+                if (inner) inner.style.transform = 'rotateY(180deg)';
 
                 setTimeout(() => {
-                    horizontalIndex = nextIdx;
-                    document.getElementById('horizontalIndicator').textContent = `${horizontalIndex + 1} / ${horizontalImages.length}`;
-                    // 更新完整圖片為下一張
-                    fullImage.src = horizontalImages[horizontalIndex];
-                    flipStrips.classList.remove('active');
-                    setTimeout(() => {
-                        fullImage.classList.remove('hidden');
-                    }, 100);
-                    // 重置正面圖片與動畫狀態
-                    strips.forEach((strip, i) => {
-                        const frontImg = strip.querySelector('.flip-face.front img');
-                        frontImg.src = horizontalImages[horizontalIndex];
-                        strip.classList.remove('flipping');
+                    const back = strip.querySelector('.flip-face.back');
+                    if (!back) return;
 
-                        // 重置transform屬性
-                        const inner = strip.querySelector('.flip-inner');
-                        if (inner) {
-                            // 👉 加上 no-animation 類別
-                            inner.classList.add('no-animation');
-
-                            // 👉 強制設定 transform
-                            inner.style.transform = 'rotateY(0deg)';
-
-                            // 👉 強制重排（觸發回流）
-                            void inner.offsetHeight;
-
-                            // 👉 移除 no-animation（讓之後的動畫還能動）
-                            inner.classList.remove('no-animation');
-                        }
+                    const backImg = document.createElement('img');
+                    backImg.src = horizontalImages[nextIdx];
+                    backImg.style.position = 'absolute';
+                    const container = document.getElementById('horizontalContainer');
+                    const containerW = container.offsetWidth || container.clientWidth;
+                    const scale = containerW / originalWidth;
+                    const imageLeft = -splitXs[idx] * scale;
+                    Object.assign(backImg.style, {
+                        left: imageLeft + 'px',
+                        top: '0',
+                        width: containerW + 'px',
+                        height: '100%',
+                        objectFit: 'cover',
+                        boxShadow: 'none',
+                        zIndex: '1',
+                        display: 'block'
                     });
-                }, stripCount * 300 + 1500);
-            } 
-          
+                    back.appendChild(backImg);
 
-            }
-        
-    </script>
+                    if (backImg.complete) {
+                        backImg.style.display = 'none';
+                        backImg.offsetHeight;
+                        backImg.style.display = 'block';
+                    }
+                }, 600);
+            }, idx * 300);
+        });
+
+        setTimeout(() => {
+            horizontalIndex = nextIdx;
+            document.getElementById('horizontalIndicator').textContent = `${horizontalIndex + 1} / ${horizontalImages.length}`;
+            fullImage.src = horizontalImages[horizontalIndex];
+            flipStrips.classList.remove('active');
+            setTimeout(() => {
+                fullImage.classList.remove('hidden');
+            }, 100);
+            strips.forEach((strip, i) => {
+                const frontImg = strip.querySelector('.flip-face.front img');
+                frontImg.src = horizontalImages[horizontalIndex];
+                strip.classList.remove('flipping');
+                const inner = strip.querySelector('.flip-inner');
+                if (inner) {
+                    inner.classList.add('no-animation');
+                    inner.style.transform = 'rotateY(0deg)';
+                    void inner.offsetHeight;
+                    inner.classList.remove('no-animation');
+                }
+            });
+        }, stripCount * 300 + 1500);
+    }
+</script>
+
 </body>
 </html>
