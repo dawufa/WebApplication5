@@ -348,7 +348,7 @@
                         setTimeout(() => {
                             const back = strip.querySelector('.flip-face.back');
                             if (!back) {
-                                console.error(分割 ${idx} 找不到back元素);
+                                console.error(`分割 ${idx} 找不到back元素`);
                                 return;
                             }
 
@@ -375,11 +375,11 @@
                             backImg.style.display = 'block';
 
                             // 調試信息
-                            console.log(分割 ${idx}: splitXs[${idx}]=${splitXs[idx]}, scale=${scale}, imageLeft=${imageLeft}, nextImage=${horizontalImages[nextIdx]}, containerW=${containerW});
+                            console.log(`分割 ${idx}: splitXs[${idx}]=${splitXs[idx]}, scale=${scale}, imageLeft=${imageLeft}, nextImage=${horizontalImages[nextIdx]}, containerW=${containerW}`);
 
                             // 立即添加圖片到DOM
                             back.appendChild(backImg);
-                            console.log(分割 ${idx} 圖片已添加到DOM);
+                            console.log(`分割 ${idx} 圖片已添加到DOM`);
 
                             // 如果圖片已經載入，強制重新渲染
                             if (backImg.complete) {
@@ -395,7 +395,7 @@
 
                 setTimeout(() => {
                     horizontalIndex = nextIdx;
-                    document.getElementById('horizontalIndicator').textContent = ${horizontalIndex + 1} / ${horizontalImages.length};
+                    document.getElementById('horizontalIndicator').textContent = `${horizontalIndex + 1} / ${horizontalImages.length}`;
                     // 更新完整圖片為下一張
                     fullImage.src = horizontalImages[horizontalIndex];
                     flipStrips.classList.remove('active');
