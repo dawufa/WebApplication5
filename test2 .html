@@ -37,14 +37,18 @@
     z-index: 2;
 }
 .horizontal-overlay-text {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  color: #111; /* 或白色，依你圖片背景對比而定 */
-  z-index: 5;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-  font-family: 'Playfair Display', serif;
-}
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #111; /* 或 white 視背景亮暗調整 */
+      font-family: 'Playfair Display', serif;
+      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+      letter-spacing: 1px;
+      line-height: 1.2;
+      z-index: 5;
+      pointer-events: none;
+      text-align: center;
+    }
 
 .horizontal-overlay-text.top {
   top: 40px; /* 往上靠 */
