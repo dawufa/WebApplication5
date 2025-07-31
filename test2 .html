@@ -36,29 +36,30 @@
     transition: opacity 2.65s ease;
     z-index: 2;
 }
-.horizontal-overlay-text {
+ .horizontal-overlay-text {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      color: #111; /* 或 white 視背景亮暗調整 */
+      color: #111; /* 黑色文字 */
       font-family: 'Playfair Display', serif;
-      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
-      letter-spacing: 1px;
-      line-height: 1.2;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      line-height: 1.1;
       z-index: 5;
       pointer-events: none;
       text-align: center;
     }
 
-.horizontal-overlay-text.top {
-  top: 40px; /* 往上靠 */
-  font-size: 60px;
-}
+    .horizontal-overlay-text.top {
+      top: 10px; /* 幾乎貼頂部 */
+      font-size: 80px;
+    }
 
-.horizontal-overlay-text.bottom {
-  bottom: 40px; /* 靠下邊 */
-  font-size: 34px;
-}
+    .horizontal-overlay-text.bottom {
+      bottom: 20px; /* 幾乎貼底部 */
+      font-size: 40px;
+    }
+
         @media (min-aspect-ratio: 6404/4269) {
             .container, .image-container, .full-image {
                 width: calc(100vh * 1.5002); /* 1.5002 = 6404/4269 */
