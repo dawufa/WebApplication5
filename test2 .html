@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
     <style>
      html, body {
     margin: 0;
@@ -37,26 +37,23 @@
     z-index: 2;
 }
 .horizontal-overlay-text {
-    position: absolute;
-    width: 90vw; /* 佔據整個圖片寬度，可依需要調整 */
-    left: 50%;
-    transform: translateX(-50%);
-    color: white;
-    font-size: 10vw; /* 更大字體，隨螢幕縮放，可用 px 固定大小 */
-    font-weight: 600;
-    text-align: center;
-    line-height: 1.2;
-    text-shadow: 3px 3px 8px rgba(0,0,0,0.8);
-    z-index: 10; /* 要比圖片與動畫更高 */
-    pointer-events: none;
-    font-family: 'Playfair Display', serif; /* 或你想要的字體 */
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #111; /* 或白色，依你圖片背景對比而定 */
+  z-index: 5;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+  font-family: 'Playfair Display', serif;
 }
+
 .horizontal-overlay-text.top {
-    top: 5vh;
+  top: 40px; /* 往上靠 */
+  font-size: 60px;
 }
 
 .horizontal-overlay-text.bottom {
-    bottom: 5vh;
+  bottom: 40px; /* 靠下邊 */
+  font-size: 34px;
 }
         @media (min-aspect-ratio: 6404/4269) {
             .container, .image-container, .full-image {
