@@ -36,6 +36,19 @@
     transition: opacity 2.65s ease;
     z-index: 2;
 }
+        .horizontal-overlay-text {
+    position: absolute;
+    bottom: 40px; /* 距離底部 */
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+    z-index: 5; /* 高於圖片與翻轉條 */
+    pointer-events: none; /* 不影響滑鼠事件 */
+}
+
         @media (min-aspect-ratio: 6404/4269) {
             .container, .image-container, .full-image {
                 width: calc(100vh * 1.5002); /* 1.5002 = 6404/4269 */
