@@ -48,7 +48,13 @@
     z-index: 5; /* 高於圖片與翻轉條 */
     pointer-events: none; /* 不影響滑鼠事件 */
 }
+.horizontal-overlay-text.top {
+    top: 40px;
+}
 
+.horizontal-overlay-text.bottom {
+    bottom: 40px;
+}
         @media (min-aspect-ratio: 6404/4269) {
             .container, .image-container, .full-image {
                 width: calc(100vh * 1.5002); /* 1.5002 = 6404/4269 */
@@ -239,8 +245,8 @@
             <div class="image-indicator" id="horizontalIndicator"></div>
             <div class="image-container" id="horizontalContainer">
                 <img class="full-image" id="horizontalFullImage" src="https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Eggyolkcake/horizontal01.jpg" alt="水平圖片 1">
-                 <div class="horizontal-overlay-text">The Moon Duo Collection</div>
-                 <div class="horizontal-overlay-text">One Golden Tourch All Eyes On You</div>
+                 <div class="horizontal-overlay-text top">The Moon Duo Collection</div>
+                 <div class="horizontal-overlay-text bottom">One Golden Tourch All Eyes On You</div>
                 <div class="flip-strips" id="horizontalFlipStrips">                   
                 </div>
             </div>
