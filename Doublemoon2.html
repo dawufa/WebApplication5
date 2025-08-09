@@ -36,6 +36,15 @@
     transition: opacity 2.65s ease;
     z-index: 2;
 }
+         .top-area {
+      flex: 0 0 auto;
+    }
+    .center-area {
+      flex: 1 1 auto;
+    }
+    .bottom-area {
+      flex: 0 0 auto;
+    }
         @media (min-aspect-ratio: 6404/4269) {
             .container, .image-container, .full-image {
                 width: calc(100vh * 1.5002); /* 1.5002 = 6404/4269 */
@@ -224,10 +233,16 @@
         <div class="section horizontal-section">
             <div class="section-title"></div>
             <div class="image-indicator" id="horizontalIndicator"></div>
+            <div class="top-area">
+    <img src="https://03d4fcf7.images2-8zm.pages.dev/Top.png" alt="上圖">
+  </div>
             <div class="image-container" id="horizontalContainer">
                 <img class="full-image" id="horizontalFullImage" src="https://images-7y2.pages.dev/Eggyolkcake/horizontal01.jpg" alt="水平圖片 1">
                 <div class="flip-strips" id="horizontalFlipStrips"></div>
             </div>
+            <div class="bottom-area">
+    <img src="https://03d4fcf7.images2-8zm.pages.dev/Under.png" alt="下圖">
+  </div>
         </div>
 
     </div>
