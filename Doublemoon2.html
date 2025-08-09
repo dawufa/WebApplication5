@@ -221,14 +221,15 @@
 .top-area,
 .bottom-area {
     position: absolute;
-    left: 0;
+    left: 50%;
     width: 100%;
     z-index: 100;
     pointer-events: none;
+    transform: translateX(-50%) scale(0.75);
 }
 
-.top-area { top: 0; }
-.bottom-area { bottom: 0; }
+.top-area { top: 0; transform-origin: top center; }
+.bottom-area { bottom: 0; transform-origin: bottom center; }
 
 .top-area img,
 .bottom-area img {
