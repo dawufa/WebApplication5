@@ -225,7 +225,7 @@
             <div class="section-title"></div>
             <div class="image-indicator" id="horizontalIndicator"></div>
             <div class="image-container" id="horizontalContainer">
-                <img class="full-image" id="horizontalFullImage" src="https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Eggyolkcake/horizontal01.jpg" alt="水平圖片 1">
+                <img class="full-image" id="horizontalFullImage" src="https://images-7y2.pages.dev/Eggyolkcake/horizontal01.jpg" alt="水平圖片 1">
                 <div class="flip-strips" id="horizontalFlipStrips"></div>
             </div>
         </div>
@@ -233,22 +233,34 @@
     </div>
 <script>
     window.addEventListener('load', () => {
-       
+        // ✅ 預載圖片
+        preloadImages(horizontalImages);
+
         setTimeout(() => {
-             initializeStrips(); // ✅ 等整個頁面與資源都載入完成
-            setTimeout(() =>nextImage('horizontal'), 1000);       
+            initializeStrips(); // ✅ 等整個頁面與資源都載入完成
+            setTimeout(() => nextImage('horizontal'), 1000);
             startAutoPlay();
-         }, 100);
+        }, 100);
     });
 
+    // ✅ 圖片改成你的 CDN 來源
     const horizontalImages = [
-        'https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Eggyolkcake/horizontal01.jpg',
-        'https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Eggyolkcake/horizontal01.jpg'
+        'https://images-7y2.pages.dev/Eggyolkcake/horizontal01.jpg',
+        'https://images-7y2.pages.dev/Eggyolkcake/horizontal01.jpg'
     ];
+
     let horizontalIndex = 0;
     const splitXs = [0, 0, 153, 695, 1255, 1805, 2365, 2905, 3470, 4025, 4575, 5130, 5695, 6255];
     const stripCount = splitXs.length;
     const originalWidth = 6400;
+
+    // ✅ 預載圖片函數
+    function preloadImages(urls) {
+        urls.forEach(url => {
+            const img = new Image();
+            img.src = url;
+        });
+    }
 
     function initializeStrips() {
         const horizontalFlipStrips = document.getElementById('horizontalFlipStrips');
@@ -376,5 +388,6 @@
         }, stripCount * 300 + 3500);
     }
 </script>
+
 </body>
 </html>
