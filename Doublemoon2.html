@@ -217,6 +217,25 @@
     box-sizing: border-box;
 }
 
+/* 讓上/下區塊蓋在 horizontalContainer 之上 */
+.top-area,
+.bottom-area {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    z-index: 10; /* 高於 .flip-strips (z-index:3) 與 .full-image (z-index:2) */
+}
+
+.top-area { top: 0; }
+.bottom-area { bottom: 0; }
+
+.top-area img,
+.bottom-area img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
     </style>
 </head>
 <body>
@@ -384,4 +403,4 @@
 </script>
 </body>
 </html>
-可以幫我重新設定.top-area 和 .bottom-area的Z軸高度嗎?他要蓋在horizontalContainer上面
+
