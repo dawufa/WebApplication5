@@ -4,14 +4,15 @@
 <style>
 html, body {
     margin: 0; padding: 0; background: #000; width: 100vw; height: 100vh; overflow: hidden;
+    font-family: Arial, sans-serif;
 }
-.container { width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; position: relative; background: #000; }
+.container { width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; }
 .image-container { position: relative; width: 100%; height: 100%; background: #000; overflow: hidden; }
-.full-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.8s ease; z-index: 2; }
+.full-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 2.65s ease; z-index: 2; }
 .full-image.hidden { opacity: 0; }
 .flip-strips { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 3; }
 .flip-strip { position: absolute; height: 100%; perspective: 800px; overflow: hidden; }
-.flip-inner { width: 100%; height: 100%; position: absolute; transform-style: preserve-3d; transition: transform 0.8s ease; transform: rotateY(0deg); }
+.flip-inner { width: 100%; height: 100%; position: absolute; transform-style: preserve-3d; transition: transform 5.0s cubic-bezier(0.4,0,0.2,1); transform: rotateY(0deg); }
 .flipping .flip-inner { transform: rotateY(180deg); }
 .flip-face { width: 100%; height: 100%; position: absolute; backface-visibility: hidden; overflow: hidden; background: #000; }
 .flip-face.back { transform: rotateY(180deg); }
@@ -19,51 +20,58 @@ html, body {
 </head>
 <body>
 <div class="container">
-    <div class="image-container" id="container">
-        <img class="full-image" id="fullImage" src="https://images-7y2.pages.dev/Eggyolkcake/horizontal01.jpg">
-        <div class="flip-strips" id="flipStrips"></div>
+    <div class="image-container" id="horizontalContainer">
+        <img class="full-image" id="horizontalFullImage" src="https://images-7y2.pages.dev/Eggyolkcake/horizontal01.jpg">
+        <div class="flip-strips" id="horizontalFlipStrips"></div>
     </div>
 </div>
 <script>
-const images = [
+const horizontalImages = [
     "https://images-7y2.pages.dev/Eggyolkcake/horizontal01.jpg",
     "https://images-7y2.pages.dev/Eggyolkcake/horizontal02.jpg"
 ];
-let currentIndex = 0;
+let horizontalIndex = 0;
 const splitXs = [0, 0, 153, 695, 1255, 1805, 2365, 2905, 3470, 4025, 4575, 5130, 5695, 6255];
 const stripCount = splitXs.length;
 const originalWidth = 6400;
-const container = document.getElementById("container");
-const flipStrips = document.getElementById("flipStrips");
-const fullImage = document.getElementById("fullImage");
 
-// 預載所有圖片
-images.forEach(src => { const img = new Image(); img.src = src; });
+const container = document.getElementById('horizontalContainer');
+const flipStrips = document.getElementById('horizontalFlipStrips');
+const fullImage = document.getElementById('horizontalFullImage');
 
-function initStrips() {
-    flipStrips.innerHTML = "";
+// 預載圖片
+horizontalImages.forEach(src => { const img = new Image(); img.src = src; });
+
+function initializeStrips() {
+    flipStrips.innerHTML = '';
     const containerW = container.offsetWidth;
     const scale = containerW / originalWidth;
+
     for (let i = 0; i < stripCount; i++) {
-        const strip = document.createElement("div");
-        strip.className = "flip-strip";
-        const left = (i === 0) ? 0 : splitXs[i] * scale;
-        const width = (i === stripCount - 1) ? containerW - left : (splitXs[i + 1] - splitXs[i]) * scale;
-        strip.style.left = left + "px";
-        strip.style.width = width + "px";
+        const strip = document.createElement('div');
+        strip.className = 'flip-strip';
+        strip.style.left = ((i === 0) ? 0 : splitXs[i] * scale) + 'px';
+        strip.style.width = ((i === stripCount - 1) ? containerW - splitXs[i] * scale : (splitXs[i + 1] - splitXs[i]) * scale) + 'px';
 
-        const inner = document.createElement("div");
-        inner.className = "flip-inner";
+        const inner = document.createElement('div');
+        inner.className = 'flip-inner';
 
-        const front = document.createElement("div");
-        front.className = "flip-face front";
-        const frontImg = document.createElement("img");
-        Object.assign(frontImg.style, { position: "absolute", left: -splitXs[i] * scale + "px", top: "0", width: containerW + "px", height: "100%", objectFit: "cover" });
-        frontImg.src = images[currentIndex];
+        const front = document.createElement('div');
+        front.className = 'flip-face front';
+        const frontImg = document.createElement('img');
+        Object.assign(frontImg.style, {
+            position: 'absolute',
+            left: -splitXs[i] * scale + 'px',
+            top: '0',
+            width: containerW + 'px',
+            height: '100%',
+            objectFit: 'cover'
+        });
+        frontImg.src = horizontalImages[horizontalIndex];
         front.appendChild(frontImg);
 
-        const back = document.createElement("div");
-        back.className = "flip-face back";
+        const back = document.createElement('div');
+        back.className = 'flip-face back';
 
         inner.appendChild(front);
         inner.appendChild(back);
@@ -73,47 +81,51 @@ function initStrips() {
 }
 
 function nextImage() {
-    const nextIndex = (currentIndex + 1) % images.length;
-    const strips = flipStrips.querySelectorAll(".flip-strip");
+    const nextIdx = (horizontalIndex + 1) % horizontalImages.length;
+    const strips = flipStrips.querySelectorAll('.flip-strip');
 
-    fullImage.classList.add("hidden");
-
-    strips.forEach((strip, i) => {
-        const back = strip.querySelector(".flip-face.back");
-        back.innerHTML = "";
-        const backImg = document.createElement("img");
+    // 換背面圖片
+    strips.forEach((strip, idx) => {
+        const back = strip.querySelector('.flip-face.back');
+        back.innerHTML = '';
+        const backImg = document.createElement('img');
         const containerW = container.offsetWidth;
         const scale = containerW / originalWidth;
-        Object.assign(backImg.style, { position: "absolute", left: -splitXs[i] * scale + "px", top: "0", width: containerW + "px", height: "100%", objectFit: "cover" });
-        backImg.src = images[nextIndex];
+        Object.assign(backImg.style, {
+            position: 'absolute',
+            left: -splitXs[idx] * scale + 'px',
+            top: '0',
+            width: containerW + 'px',
+            height: '100%',
+            objectFit: 'cover'
+        });
+        backImg.src = horizontalImages[nextIdx];
         back.appendChild(backImg);
     });
 
-    let i = 0;
-    function flipStep() {
-        if (i < strips.length) {
-            strips[i].classList.add("flipping");
-            i++;
-            requestAnimationFrame(flipStep);
-        } else {
-            setTimeout(() => {
-                currentIndex = nextIndex;
-                fullImage.src = images[currentIndex];
-                fullImage.classList.remove("hidden");
-                strips.forEach(strip => {
-                    strip.classList.remove("flipping");
-                    const frontImg = strip.querySelector(".flip-face.front img");
-                    frontImg.src = images[currentIndex];
-                });
-            }, 500);
-        }
-    }
-    flipStep();
+    // 逐條翻轉
+    strips.forEach((strip, idx) => {
+        setTimeout(() => {
+            strip.classList.add('flipping');
+        }, idx * 300);
+    });
+
+    // 動畫完成後更新正面
+    setTimeout(() => {
+        horizontalIndex = nextIdx;
+        fullImage.src = horizontalImages[horizontalIndex];
+        fullImage.classList.remove('hidden');
+        strips.forEach(strip => {
+            strip.classList.remove('flipping');
+            const frontImg = strip.querySelector('.flip-face.front img');
+            frontImg.src = horizontalImages[horizontalIndex];
+        });
+    }, stripCount * 300 + 500);
 }
 
-window.addEventListener("load", () => {
-    initStrips();
-    setInterval(nextImage, 5000); // 每 5 秒換圖
+window.addEventListener('load', () => {
+    initializeStrips();
+    setInterval(nextImage, 5000); // 每 5 秒翻一次
 });
 </script>
 </body>
