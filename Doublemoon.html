@@ -217,25 +217,6 @@
     box-sizing: border-box;
 }
         /* 讓上/下區塊蓋在 horizontalContainer 之上 */
-.top-area,
-.bottom-area {
-    position: absolute;
-    left: 50%;
-    width: 90%;
-    z-index: 100;
-    pointer-events: none;
-    transform: translateX(-50%) scale(0.75);
-}
-
-.top-area { top: 0; transform-origin: top center; }
-.bottom-area { bottom: 0; transform-origin: bottom center; }
-
-.top-area img,
-.bottom-area img {
-    width: 100%;
-    height: auto;
-    display: block;
-}
 
     </style>
 </head>
@@ -243,19 +224,11 @@
     <div class="container">
         <div class="section horizontal-section">
             <div class="section-title"></div>
-            <div class="image-indicator" id="horizontalIndicator"></div>
-             <div class="top-area">
-    <img src="https://03d4fcf7.images2-8zm.pages.dev/Top.png" alt="上圖">
-  </div>
             <div class="image-container" id="horizontalContainer">
                 <img class="full-image" id="horizontalFullImage" src="https://images-7y2.pages.dev/Eggyolkcake/horizontal01.jpg" alt="水平圖片 1">
                 <div class="flip-strips" id="horizontalFlipStrips"></div>
             </div>
-            <div class="bottom-area">
-    <img src="https://03d4fcf7.images2-8zm.pages.dev/Under.png" alt="下圖">
-  </div>
         </div>
-
     </div>
 <script>
     window.addEventListener('load', () => {
