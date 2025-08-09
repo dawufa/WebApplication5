@@ -1,88 +1,381 @@
-<!doctype html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>圖片三段排版＋動畫</title>
-  
-  <!-- 預載三張圖 -->
-  <link rel="preload" as="image" href="https://03d4fcf7.images2-8zm.pages.dev/Top.png">
-  <link rel="preload" as="image" href="https://images-7y2.pages.dev/Eggyolkcake/horizontal01.jpg">
-  <link rel="preload" as="image" href="https://03d4fcf7.images2-8zm.pages.dev/Under.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      background: #000;
-    }
-    .frame {
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-    }
-    .frame img {
-      width: 100%;
-      display: block;
-    }
-    /* 百葉窗動畫 */
-    .center-area {
-      position: relative;
-      overflow: hidden;
-    }
-    .center-area img {
-      display: block;
-      width: 100%;
-    }
-    .shutter {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: grid;
-      grid-template-columns: repeat(10, 1fr);
-    }
-    .shutter div {
-      background: #000;
-      animation: open 1s ease forwards;
-      transform: translateY(0);
-    }
-    @keyframes open {
-      to {
-        transform: translateY(-100%);
-      }
-    }
-    .shutter div:nth-child(1) { animation-delay: 0s; }
-    .shutter div:nth-child(2) { animation-delay: 0.1s; }
-    .shutter div:nth-child(3) { animation-delay: 0.2s; }
-    .shutter div:nth-child(4) { animation-delay: 0.3s; }
-    .shutter div:nth-child(5) { animation-delay: 0.4s; }
-    .shutter div:nth-child(6) { animation-delay: 0.5s; }
-    .shutter div:nth-child(7) { animation-delay: 0.6s; }
-    .shutter div:nth-child(8) { animation-delay: 0.7s; }
-    .shutter div:nth-child(9) { animation-delay: 0.8s; }
-    .shutter div:nth-child(10) { animation-delay: 0.9s; }
-  </style>
+    <style>
+     html, body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Arial', sans-serif;
+}
+
+.container, .image-container {
+    width: 100vw;
+    height: calc(100vw * 0.6667);  /* 保持圖片原比例：4269 / 6404 */
+    min-width: 100vw;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+    overflow: hidden;
+}
+
+.full-image {
+    width: 100vw;
+    height: calc(100vw * 0.6667);
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: opacity 2.65s ease;
+    z-index: 2;
+}
+        @media (min-aspect-ratio: 6404/4269) {
+            .container, .image-container, .full-image {
+                width: calc(100vh * 1.5002); /* 1.5002 = 6404/4269 */
+                height: 100vh;
+            }
+        }
+        .section {
+             position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .section-title {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 10;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .image-indicator {
+            text-align: center;
+            margin: 10px 0;
+            font-weight: bold;
+            color: #333;
+            display: none;
+        }
+
+        .image-container {
+             position: relative;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            overflow: hidden;
+        }
+
+        .full-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 2.65s ease;
+            z-index: 2;
+        }
+
+            .full-image.hidden {
+                opacity: 0;
+            }
+        /* 水平圖片：直條翻轉 */
+        .flip-strips {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+        }
+
+        .flip-strip {
+            position: absolute;
+            height: 100%;
+            perspective: 800px;
+            overflow: hidden;
+        }
+
+        .flip-inner {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-style: preserve-3d;
+            transition: transform 5.0s cubic-bezier(0.4,0,0.2,1);
+            transform: rotateY(0deg);
+        }
+
+        .flip-strip.flipping .flip-inner {
+            transform: rotateY(180deg) !important;
+        }
+
+        .flip-face {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            backface-visibility: hidden;
+            overflow: hidden;
+            background: #000;
+            box-shadow: none;
+        }
+
+            .flip-face.front img,
+            .flip-face.back img {
+                height: 100%;
+                object-fit: cover;
+                position: absolute;
+                top: 0;
+                box-shadow: none;
+            }
+      
+            .flip-face.back {
+                transform: rotateY(180deg);
+            }
+        /* 垂直圖片：橫條翻轉 */
+        .flip-strips-vertical {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flip-strip-vertical {
+            flex: 1 1 0;
+            width: 100%;
+            perspective: 800px;
+            position: relative;
+        }
+
+        .flip-inner-vertical {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-style: preserve-3d;
+            transition: transform 1.2s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        .flip-strip-vertical.flipping .flip-inner-vertical {
+            transform: rotateX(180deg);
+        }
+
+        .flip-face-vertical {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            backface-visibility: hidden;
+            overflow: hidden;
+        }
+
+            .flip-face-vertical.front img,
+            .flip-face-vertical.back img {
+                width: 100%;
+                height: 1200%; /* 12條，每條只顯示1/12 */
+                object-fit: contain;
+                position: absolute;
+                left: 0;
+                background: #000;
+            }
+
+            .flip-face-vertical.back {
+                transform: rotateX(180deg);
+            }
+        /* 當加上 no-animation 類別時，取消動畫 */
+        .no-animation {
+            transition: none !important;
+            transform: rotateX(180deg); /* 還是會翻，但瞬間完成 */
+        }
+        html, body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Arial', sans-serif;
+    box-sizing: border-box;
+}
+
+    </style>
 </head>
 <body>
+    <div class="container">
+        <div class="section horizontal-section">
+            <div class="section-title"></div>
+            <div class="image-indicator" id="horizontalIndicator"></div>
+            <div class="image-container" id="horizontalContainer">
+                <img class="full-image" id="horizontalFullImage" src="https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Eggyolkcake/horizontal01.jpg" alt="水平圖片 1">
+                <div class="flip-strips" id="horizontalFlipStrips"></div>
+            </div>
+        </div>
 
-<div class="frame">
-  <div class="top-area">
-    <img src="https://03d4fcf7.images2-8zm.pages.dev/Top.png" alt="上圖">
-  </div>
-  
-  <div class="center-area">
-    <img src="https://images-7y2.pages.dev/Eggyolkcake/horizontal01.jpg" alt="主圖">
-    <div class="shutter">
-      <div></div><div></div><div></div><div></div><div></div>
-      <div></div><div></div><div></div><div></div><div></div>
     </div>
-  </div>
-  
-  <div class="bottom-area">
-    <img src="https://03d4fcf7.images2-8zm.pages.dev/Under.png" alt="下圖">
-  </div>
-</div>
+<script>
+    window.addEventListener('load', () => {
+       
+        setTimeout(() => {
+             initializeStrips(); // ✅ 等整個頁面與資源都載入完成
+            setTimeout(() =>nextImage('horizontal'), 1000);       
+            startAutoPlay();
+         }, 100);
+    });
 
+    const horizontalImages = [
+        'https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Eggyolkcake/horizontal01.jpg',
+        'https://dawufa.github.io/WebApplication5/WebApplication5/IMAGES/Eggyolkcake/horizontal01.jpg'
+    ];
+    let horizontalIndex = 0;
+    const splitXs = [0, 0, 153, 695, 1255, 1805, 2365, 2905, 3470, 4025, 4575, 5130, 5695, 6255];
+    const stripCount = splitXs.length;
+    const originalWidth = 6400;
+
+    function initializeStrips() {
+        const horizontalFlipStrips = document.getElementById('horizontalFlipStrips');
+        horizontalFlipStrips.innerHTML = '';
+        const container = document.getElementById('horizontalContainer');
+        const containerW = container.offsetWidth || container.clientWidth;
+        const scale = containerW / originalWidth;
+        for (let i = 0; i < stripCount; i++) {
+            const strip = document.createElement('div');
+            strip.className = 'flip-strip';
+            let left = (i === 0) ? 0 : splitXs[i] * scale;
+            let width = (i === stripCount - 1)
+                ? containerW - left
+                : (splitXs[i + 1] - splitXs[i]) * scale;
+            strip.style.left = left + 'px';
+            strip.style.width = width + 'px';
+            strip.style.position = 'absolute';
+            strip.style.height = '100%';
+            strip.style.overflow = 'hidden';
+
+            const inner = document.createElement('div');
+            inner.className = 'flip-inner';
+
+            const front = document.createElement('div');
+            front.className = 'flip-face front';
+            const frontImg = document.createElement('img');
+            frontImg.src = horizontalImages[horizontalIndex];
+            frontImg.style.position = 'absolute';
+            frontImg.style.left = -splitXs[i] * scale + 'px';
+            frontImg.style.top = '0';
+            frontImg.style.width = containerW + 'px';
+            frontImg.style.height = '100%';
+            frontImg.style.objectFit = 'cover';
+            front.appendChild(frontImg);
+
+            const back = document.createElement('div');
+            back.className = 'flip-face back';
+            inner.appendChild(front);
+            inner.appendChild(back);
+            strip.appendChild(inner);
+            horizontalFlipStrips.appendChild(strip);
+        }
+        horizontalFlipStrips.classList.remove('active');
+    }
+
+    function startAutoPlay() {
+        setInterval(() => {
+            nextImage('horizontal');
+        }, 15000);
+    }
+
+    function nextImage(type) {
+        if (type !== 'horizontal') return;
+
+        const fullImage = document.getElementById('horizontalFullImage');
+        const flipStrips = document.getElementById('horizontalFlipStrips');
+        const nextIdx = (horizontalIndex + 1) % horizontalImages.length;
+        fullImage.classList.add('hidden');
+        flipStrips.classList.add('active');
+
+        const strips = flipStrips.querySelectorAll('.flip-strip');
+        strips.forEach((strip, i) => {
+            const back = strip.querySelector('.flip-face.back');
+            back.innerHTML = '';
+        });
+
+        strips.forEach((strip, idx) => {
+            setTimeout(() => {
+                strip.classList.add('flipping');
+                const inner = strip.querySelector('.flip-inner');
+                if (inner) inner.style.transform = 'rotateY(180deg)';
+
+                setTimeout(() => {
+                    const back = strip.querySelector('.flip-face.back');
+                    if (!back) return;
+
+                    const backImg = document.createElement('img');
+                    backImg.src = horizontalImages[nextIdx];
+                    backImg.style.position = 'absolute';
+                    const container = document.getElementById('horizontalContainer');
+                    const containerW = container.offsetWidth || container.clientWidth;
+                    const scale = containerW / originalWidth;
+                    const imageLeft = -splitXs[idx] * scale;
+                    Object.assign(backImg.style, {
+                        left: imageLeft + 'px',
+                        top: '0',
+                        width: containerW + 'px',
+                        height: '100%',
+                        objectFit: 'cover',
+                        boxShadow: 'none',
+                        zIndex: '1',
+                        display: 'block'
+                    });
+                    back.appendChild(backImg);
+
+                    if (backImg.complete) {
+                        backImg.style.display = 'none';
+                        backImg.offsetHeight;
+                        backImg.style.display = 'block';
+                    }
+                }, 900);
+            }, idx * 300);
+        });
+
+        setTimeout(() => {
+            horizontalIndex = nextIdx;
+            document.getElementById('horizontalIndicator').textContent = `${horizontalIndex + 1} / ${horizontalImages.length}`;
+            fullImage.src = horizontalImages[horizontalIndex];
+            flipStrips.classList.remove('active');
+            setTimeout(() => {
+                fullImage.classList.remove('hidden');
+            }, 100);
+            strips.forEach((strip, i) => {
+                const frontImg = strip.querySelector('.flip-face.front img');
+                frontImg.src = horizontalImages[horizontalIndex];
+                strip.classList.remove('flipping');
+                const inner = strip.querySelector('.flip-inner');
+                if (inner) {
+                    inner.classList.add('no-animation');
+                    inner.style.transform = 'rotateY(0deg)';
+                    void inner.offsetHeight;
+                    inner.classList.remove('no-animation');
+                }
+            });
+        }, stripCount * 300 + 3500);
+    }
+</script>
 </body>
 </html>
+可以幫我重新設定.top-area 和 .bottom-area的Z軸高度嗎?他要蓋在horizontalContainer上面
