@@ -247,10 +247,13 @@
     </div>
 <script>
     window.addEventListener('load', () => {
-       
+        console.log('Page loaded, initializing...');
         setTimeout(() => {
              initializeStrips(); // ✅ 等整個頁面與資源都載入完成
-            setTimeout(() =>nextImage('horizontal'), 1000);       
+            setTimeout(() => {
+                console.log('Starting image transition...');
+                nextImage('horizontal');
+            }, 1000);       
             startAutoPlay();
          }, 100);
     });
@@ -267,50 +270,62 @@
     function initializeStrips() {
         const horizontalFlipStrips = document.getElementById('horizontalFlipStrips');
         horizontalFlipStrips.innerHTML = '';
-        const container = document.getElementById('horizontalContainer');
         const fullImage = document.getElementById('horizontalFullImage');
         
-        // 使用圖片的實際顯示尺寸
-        const containerW = fullImage.offsetWidth || fullImage.clientWidth;
-        const containerH = fullImage.offsetHeight || fullImage.clientHeight;
-        const scale = containerW / originalWidth;
-        
-        for (let i = 0; i < stripCount; i++) {
-            const strip = document.createElement('div');
-            strip.className = 'flip-strip';
-            let left = (i === 0) ? 0 : splitXs[i] * scale;
-            let width = (i === stripCount - 1)
-                ? containerW - left
-                : (splitXs[i + 1] - splitXs[i]) * scale;
-            strip.style.left = left + 'px';
-            strip.style.width = width + 'px';
-            strip.style.position = 'absolute';
-            strip.style.height = '100%';
-            strip.style.overflow = 'hidden';
-
-            const inner = document.createElement('div');
-            inner.className = 'flip-inner';
-
-            const front = document.createElement('div');
-            front.className = 'flip-face front';
-            const frontImg = document.createElement('img');
-            frontImg.src = horizontalImages[horizontalIndex];
-            frontImg.style.position = 'absolute';
-            frontImg.style.left = -splitXs[i] * scale + 'px';
-            frontImg.style.top = '0';
-            frontImg.style.width = containerW + 'px';
-            frontImg.style.height = '100%';
-            frontImg.style.objectFit = 'contain';
-            front.appendChild(frontImg);
-
-            const back = document.createElement('div');
-            back.className = 'flip-face back';
-            inner.appendChild(front);
-            inner.appendChild(back);
-            strip.appendChild(inner);
-            horizontalFlipStrips.appendChild(strip);
+        // 等待圖片載入完成後再計算尺寸
+        if (fullImage.complete) {
+            createStrips();
+        } else {
+            fullImage.addEventListener('load', createStrips);
         }
-        horizontalFlipStrips.classList.remove('active');
+        
+        function createStrips() {
+            // 使用圖片的實際顯示尺寸
+            const containerW = fullImage.offsetWidth || fullImage.clientWidth;
+            const containerH = fullImage.offsetHeight || fullImage.clientHeight;
+            const scale = containerW / originalWidth;
+            
+            // 設定翻轉條帶容器的尺寸
+            horizontalFlipStrips.style.width = containerW + 'px';
+            horizontalFlipStrips.style.height = containerH + 'px';
+            
+            for (let i = 0; i < stripCount; i++) {
+                const strip = document.createElement('div');
+                strip.className = 'flip-strip';
+                let left = (i === 0) ? 0 : splitXs[i] * scale;
+                let width = (i === stripCount - 1)
+                    ? containerW - left
+                    : (splitXs[i + 1] - splitXs[i]) * scale;
+                strip.style.left = left + 'px';
+                strip.style.width = width + 'px';
+                strip.style.position = 'absolute';
+                strip.style.height = '100%';
+                strip.style.overflow = 'hidden';
+
+                const inner = document.createElement('div');
+                inner.className = 'flip-inner';
+
+                const front = document.createElement('div');
+                front.className = 'flip-face front';
+                const frontImg = document.createElement('img');
+                frontImg.src = horizontalImages[horizontalIndex];
+                frontImg.style.position = 'absolute';
+                frontImg.style.left = -splitXs[i] * scale + 'px';
+                frontImg.style.top = '0';
+                frontImg.style.width = containerW + 'px';
+                frontImg.style.height = '100%';
+                frontImg.style.objectFit = 'contain';
+                front.appendChild(frontImg);
+
+                const back = document.createElement('div');
+                back.className = 'flip-face back';
+                inner.appendChild(front);
+                inner.appendChild(back);
+                strip.appendChild(inner);
+                horizontalFlipStrips.appendChild(strip);
+            }
+            horizontalFlipStrips.classList.remove('active');
+        }
     }
 
     function startAutoPlay() {
@@ -347,8 +362,8 @@
                     const backImg = document.createElement('img');
                     backImg.src = horizontalImages[nextIdx];
                     backImg.style.position = 'absolute';
-                    const container = document.getElementById('horizontalContainer');
-                    const containerW = container.offsetWidth || container.clientWidth;
+                    const fullImage = document.getElementById('horizontalFullImage');
+                    const containerW = fullImage.offsetWidth || fullImage.clientWidth;
                     const scale = containerW / originalWidth;
                     const imageLeft = -splitXs[idx] * scale;
                     Object.assign(backImg.style, {
