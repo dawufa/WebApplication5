@@ -98,6 +98,12 @@
             height: 100%;
             z-index: 3;
             pointer-events: none;
+            opacity: 0; /* 初始隱藏 */
+            transition: opacity 0.3s ease;
+        }
+
+        .flip-strips.active {
+            opacity: 1; /* 動畫時顯示 */
         }
 
         .flip-strip {
@@ -138,7 +144,7 @@
             .flip-face.back img {
                 width: 100%;
                 height: 100%;
-                object-fit: contain;
+                object-fit: cover; /* 改回 cover 以確保條帶正確顯示 */
                 position: absolute;
                 top: 0;
                 left: 0;
@@ -273,8 +279,13 @@
     function initializeStrips() {
         const horizontalFlipStrips = document.getElementById('horizontalFlipStrips');
         horizontalFlipStrips.innerHTML = '';
-        const container = document.getElementById('horizontalContainer');
         const fullImage = document.getElementById('horizontalFullImage');
+        
+        // 等待圖片載入完成後再計算尺寸
+        if (!fullImage.complete) {
+            fullImage.addEventListener('load', () => initializeStrips());
+            return;
+        }
         
         // 使用圖片的實際顯示尺寸
         const containerW = fullImage.offsetWidth || fullImage.clientWidth;
@@ -304,9 +315,9 @@
             frontImg.style.position = 'absolute';
             frontImg.style.left = -splitXs[i] * scale + 'px';
             frontImg.style.top = '0';
-            frontImg.style.width = containerW + 'px';
+            frontImg.style.width = originalWidth * scale + 'px'; // 使用原始寬度
             frontImg.style.height = '100%';
-            frontImg.style.objectFit = 'contain';
+            frontImg.style.objectFit = 'cover';
             front.appendChild(frontImg);
 
             const back = document.createElement('div');
@@ -353,16 +364,16 @@
                     const backImg = document.createElement('img');
                     backImg.src = horizontalImages[nextIdx];
                     backImg.style.position = 'absolute';
-                    const container = document.getElementById('horizontalContainer');
-                    const containerW = container.offsetWidth || container.clientWidth;
+                    const fullImage = document.getElementById('horizontalFullImage');
+                    const containerW = fullImage.offsetWidth || fullImage.clientWidth;
                     const scale = containerW / originalWidth;
                     const imageLeft = -splitXs[idx] * scale;
                     Object.assign(backImg.style, {
                         left: imageLeft + 'px',
                         top: '0',
-                        width: containerW + 'px',
+                        width: originalWidth * scale + 'px', // 使用原始寬度
                         height: '100%',
-                        objectFit: 'contain',
+                        objectFit: 'cover',
                         boxShadow: 'none',
                         zIndex: '1',
                         display: 'block'
