@@ -91,19 +91,6 @@
     }
 }
 
-/* 確保圖片容器正確居中 */
-.image-container {
-    width: 100%;
-    background: #000;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-    min-height: 100vh;
-    padding: 20px 0;
-}
-
 /* 防止內容重疊 */
 .container {
     width: 100%;
@@ -122,6 +109,14 @@
     .image-container {
         padding: 40px 0;
     }
+    
+    .top-area {
+        top: 40px;
+    }
+    
+    .bottom-area {
+        bottom: 40px;
+    }
 }
 
 @media (max-width: 767px) {
@@ -131,6 +126,14 @@
     
     .image-container {
         padding: 10px 0;
+    }
+    
+    .top-area {
+        top: 10px;
+    }
+    
+    .bottom-area {
+        bottom: 10px;
     }
 }
 
@@ -269,8 +272,15 @@
     transform: translateX(-50%) scale(0.75);
 }
 
-.top-area { top: 0; transform-origin: top center; }
-.bottom-area { bottom: 0; transform-origin: bottom center; }
+.top-area { 
+    top: 20px; 
+    transform-origin: top center; 
+}
+
+.bottom-area { 
+    bottom: 20px; 
+    transform-origin: bottom center; 
+}
 
 .top-area img,
 .bottom-area img {
