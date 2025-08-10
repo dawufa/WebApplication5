@@ -49,7 +49,7 @@
         .section {
              position: relative;
             width: 100%;
-            height: 100%;
+            min-height: 100vh;
         }
 
         .section-title {
@@ -74,18 +74,15 @@
         .image-container {
              position: relative;
             width: 100%;
-            height: 100%;
+            min-height: 100vh;
             background: #000;
-            overflow: hidden;
         }
 
         .full-image {
-            position: absolute;
-            top: 0;
-            left: 0;
+            position: relative;
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            height: 100vh;
+            object-fit: contain;
             transition: opacity 2.65s ease;
             z-index: 2;
         }
@@ -101,6 +98,7 @@
             width: 100%;
             height: 100%;
             z-index: 3;
+            pointer-events: none;
         }
 
         .flip-strip {
@@ -285,8 +283,13 @@
         const horizontalFlipStrips = document.getElementById('horizontalFlipStrips');
         horizontalFlipStrips.innerHTML = '';
         const container = document.getElementById('horizontalContainer');
-        const containerW = container.offsetWidth || container.clientWidth;
+        const fullImage = document.getElementById('horizontalFullImage');
+        
+        // 使用圖片的實際顯示尺寸
+        const containerW = fullImage.offsetWidth || fullImage.clientWidth;
+        const containerH = fullImage.offsetHeight || fullImage.clientHeight;
         const scale = containerW / originalWidth;
+        
         for (let i = 0; i < stripCount; i++) {
             const strip = document.createElement('div');
             strip.className = 'flip-strip';
@@ -312,7 +315,7 @@
             frontImg.style.top = '0';
             frontImg.style.width = containerW + 'px';
             frontImg.style.height = '100%';
-            frontImg.style.objectFit = 'cover';
+            frontImg.style.objectFit = 'contain';
             front.appendChild(frontImg);
 
             const back = document.createElement('div');
@@ -368,7 +371,7 @@
                         top: '0',
                         width: containerW + 'px',
                         height: '100%',
-                        objectFit: 'cover',
+                        objectFit: 'contain',
                         boxShadow: 'none',
                         zIndex: '1',
                         display: 'block'
