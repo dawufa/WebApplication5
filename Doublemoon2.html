@@ -74,12 +74,24 @@
                 height: calc(100vw * 0.6667); /* 保持圖片原比例：4269 / 6404 */
                 min-height: 100vh;
             }
+            
+            /* 寬螢幕：上下裝飾圖片可以稍大 */
+            .top-area,
+            .bottom-area {
+                transform: translateX(-50%) scale(0.9);
+            }
         }
         @media (max-aspect-ratio: 6404/4269) {
             .container, .image-container, .full-image {
                 width: 100vw;
                 height: calc(100vw * 0.6667); /* 保持圖片原比例：4269 / 6404 */
                 min-height: 100vh;
+            }
+            
+            /* 窄螢幕：上下裝飾圖片稍小，避免過度佔用空間 */
+            .top-area,
+            .bottom-area {
+                transform: translateX(-50%) scale(0.8);
             }
         }
 
@@ -210,10 +222,10 @@
 .bottom-area {
     position: absolute;
     left: 50%;
-    width: 90%;
+    width: 100%;
     z-index: 100;
     pointer-events: none;
-    transform: translateX(-50%) scale(0.75);
+    transform: translateX(-50%) scale(0.85);
 }
 
 .top-area { top: 0; transform-origin: top center; }
@@ -398,4 +410,3 @@
 </script>
 </body>
 </html>
-
