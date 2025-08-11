@@ -3,30 +3,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
-html, body {
+     html, body {
     margin: 0;
     padding: 0;
     background: #000;
     width: 100%;
-    height: 100%;
+    min-height: 100vh;
     font-family: 'Arial', sans-serif;
     box-sizing: border-box;
-    overflow: hidden; /* 防止滾動條 */
+    overflow-x: auto;
+    overflow-y: auto;
 }
 
-/* 整個容器全螢幕 */
-.container,
-.section,
-.image-container {
+.container {
     width: 100vw;
-    height: 100vh;
-    background: #000;
-    position: relative;
+    height: calc(100vw * 0.6667); /* 保持圖片原比例：4269 / 6404 */
     margin: 0;
     padding: 0;
+    background: #000;
+    position: relative;
 }
 
-/* 標題 */
+.section {
+    width: 100vw;
+    height: calc(100vw * 0.6667); /* 保持圖片原比例：4269 / 6404 */
+    position: relative;
+    background: #000;
+}
+
 .section-title {
     position: absolute;
     top: 20px;
@@ -38,7 +42,6 @@ html, body {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
 }
 
-/* 圖片指示器 */
 .image-indicator {
     text-align: center;
     margin: 10px 0;
@@ -47,156 +50,174 @@ html, body {
     display: none;
 }
 
-/* 主圖片：填滿螢幕並裁切 */
+.image-container {
+    width: 100vw;
+    height: calc(100vw * 0.6667); /* 保持圖片原比例：4269 / 6404 */
+    background: #000;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .full-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: 100vw;
+    height: calc(100vw * 0.6667); /* 保持圖片原比例：4269 / 6404 */
+    object-fit: contain;
     transition: opacity 2.65s ease;
     z-index: 2;
     position: relative;
 }
+        @media (min-aspect-ratio: 6404/4269) {
+            .container, .image-container, .full-image {
+                width: 100vw;
+                height: calc(100vw * 0.6667); /* 保持圖片原比例：4269 / 6404 */
+                min-height: 100vh;
+            }
+            
+            /* 寬螢幕：上下裝飾圖片可以稍大 */
+            .top-area,
+            .bottom-area {
+                transform: translateX(-50%) scale(0.9);
+            }
+        }
+        @media (max-aspect-ratio: 6404/4269) {
+            .container, .image-container, .full-image {
+                width: 100vw;
+                height: calc(100vw * 0.6667); /* 保持圖片原比例：4269 / 6404 */
+                min-height: 100vh;
+            }
+            
+            /* 窄螢幕：上下裝飾圖片稍小，避免過度佔用空間 */
+            .top-area,
+            .bottom-area {
+                transform: translateX(-50%) scale(0.8);
+            }
+        }
 
-/* 寬螢幕 & 窄螢幕都一樣：填滿螢幕 */
-@media (min-aspect-ratio: 6404/4269),
-       (max-aspect-ratio: 6404/4269) {
-    .container, .image-container, .full-image {
-        width: 100%;
-        height: 100%;
-    }
-}
+        .full-image.hidden {
+            opacity: 0;
+        }
+        /* 水平圖片：直條翻轉 */
+        .flip-strips {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            pointer-events: none;
+        }
 
-/* 隱藏動畫階段 */
-.full-image.hidden {
-    opacity: 0;
-}
+        .flip-strip {
+            position: absolute;
+            height: 100%;
+            perspective: 800px;
+            overflow: hidden;
+        }
 
-/* 水平圖片翻轉條 */
-.flip-strips {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 3;
-    pointer-events: none;
-}
+        .flip-inner {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-style: preserve-3d;
+            transition: transform 5.0s cubic-bezier(0.4,0,0.2,1);
+            transform: rotateY(0deg);
+        }
 
-.flip-strip {
-    position: absolute;
-    height: 100%;
-    perspective: 800px;
-    overflow: hidden;
-}
+        .flip-strip.flipping .flip-inner {
+            transform: rotateY(180deg) !important;
+        }
 
-.flip-inner {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform-style: preserve-3d;
-    transition: transform 5.0s cubic-bezier(0.4,0,0.2,1);
-    transform: rotateY(0deg);
-}
+        .flip-face {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            backface-visibility: hidden;
+            overflow: hidden;
+            background: #000;
+            box-shadow: none;
+        }
 
-.flip-strip.flipping .flip-inner {
-    transform: rotateY(180deg) !important;
-}
+            .flip-face.front img,
+            .flip-face.back img {
+                height: 100%;
+                object-fit: contain;
+                position: absolute;
+                top: 0;
+                box-shadow: none;
+            }
+      
+            .flip-face.back {
+                transform: rotateY(180deg);
+            }
+        /* 垂直圖片：橫條翻轉 */
+        .flip-strips-vertical {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+        }
 
-.flip-face {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    backface-visibility: hidden;
-    overflow: hidden;
-    background: #000;
-    box-shadow: none;
-}
+        .flip-strip-vertical {
+            flex: 1 1 0;
+            width: 100%;
+            perspective: 800px;
+            position: relative;
+        }
 
-/* 翻轉的正反面圖片：也要填滿並裁切 */
-.flip-face.front img,
-.flip-face.back img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    position: absolute;
-    top: 0;
-    left: 0;
-    box-shadow: none;
-}
+        .flip-inner-vertical {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-style: preserve-3d;
+            transition: transform 1.2s cubic-bezier(0.4,0,0.2,1);
+        }
 
-.flip-face.back {
-    transform: rotateY(180deg);
-}
+        .flip-strip-vertical.flipping .flip-inner-vertical {
+            transform: rotateX(180deg);
+        }
 
-/* 垂直圖片翻轉條 */
-.flip-strips-vertical {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 3;
-    display: flex;
-    flex-direction: column;
-}
+        .flip-face-vertical {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            backface-visibility: hidden;
+            overflow: hidden;
+        }
 
-.flip-strip-vertical {
-    flex: 1 1 0;
-    width: 100%;
-    perspective: 800px;
-    position: relative;
-}
+            .flip-face-vertical.front img,
+            .flip-face-vertical.back img {
+                width: 100%;
+                height: 1200%; /* 12條，每條只顯示1/12 */
+                object-fit: contain;
+                position: absolute;
+                left: 0;
+                background: #000;
+            }
 
-.flip-inner-vertical {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform-style: preserve-3d;
-    transition: transform 1.2s cubic-bezier(0.4,0,0.2,1);
-}
+            .flip-face-vertical.back {
+                transform: rotateX(180deg);
+            }
+        /* 當加上 no-animation 類別時，取消動畫 */
+        .no-animation {
+            transition: none !important;
+            transform: rotateX(180deg); /* 還是會翻，但瞬間完成 */
+        }
 
-.flip-strip-vertical.flipping .flip-inner-vertical {
-    transform: rotateX(180deg);
-}
-
-.flip-face-vertical {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    backface-visibility: hidden;
-    overflow: hidden;
-}
-
-.flip-face-vertical.front img,
-.flip-face-vertical.back img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    position: absolute;
-    left: 0;
-    top: 0;
-    background: #000;
-}
-
-.flip-face-vertical.back {
-    transform: rotateX(180deg);
-}
-
-/* 當加上 no-animation 類別時，取消動畫 */
-.no-animation {
-    transition: none !important;
-    transform: rotateX(180deg);
-}
-
-/* 上/下裝飾圖層 */
+/* 讓上/下區塊蓋在 horizontalContainer 之上 */
 .top-area,
 .bottom-area {
     position: absolute;
@@ -216,7 +237,6 @@ html, body {
     height: auto;
     display: block;
 }
-
 
     </style>
 </head>
